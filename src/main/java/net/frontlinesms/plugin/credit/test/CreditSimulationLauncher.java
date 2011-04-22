@@ -9,8 +9,11 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import net.frontlinesms.CommUtils;
+import net.frontlinesms.payment.safaricom.RealCService;
+import net.frontlinesms.payment.safaricom.SafaricomPaymentService;
 
 import org.mockito.Mockito;
+import org.smslib.CService;
 
 import serial.SerialClassFactory;
 import serial.mock.CommPortIdentifier;
@@ -20,9 +23,25 @@ import serial.mock.SerialPortHandler;
 /**
  * @author aga
  */
+@SuppressWarnings("unchecked")
 public class CreditSimulationLauncher {
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
+		setupMockModem();
+		
+		SafaricomPaymentService safaricom = new SafaricomPaymentService();
+		safaricom.setCService(new RealCService());
+		
+		// Launch FrontlineSMS
+		startFrontlineSms(args);
+		
+		System.out.println("Serial lib: " + SerialClassFactory.getInstance().getSerialPackageName());
+	}
+
+	private static void startFrontlineSms(String... args) {
+		net.frontlinesms.DesktopLauncher.main(args);
+	}
+
+	private static void setupMockModem() throws Exception {
 		// Set up modem simulation
 		MockSerial.init();
 		MockSerial.setMultipleOwnershipAllowed(true);
@@ -42,11 +61,6 @@ public class CreditSimulationLauncher {
 			System.out.println(s);
 		}
 		System.out.println("---");
-		
-		// Launch FrontlineSMS
-		net.frontlinesms.DesktopLauncher.main(args);
-		
-		System.out.println("Serial lib: " + SerialClassFactory.getInstance().getSerialPackageName());
 	}
 }
 
