@@ -10,7 +10,7 @@ public class SafaricomWavecomPortHandler extends StatefulHayesPortHandler {
 }
 
 class SafaricomWavecomStates {
-	static final HayesState INITIAL_STATE = HayesState.createState("ERROR: initial",
+	static final HayesState INITIAL_STATE = HayesState.createState("ERROR: 0",
 			"AT", "OK",
 			"AT+CMEE=1", "OK",
 			"AT+STSF=1", "OK",

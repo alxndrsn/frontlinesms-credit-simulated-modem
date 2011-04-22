@@ -9,7 +9,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import net.frontlinesms.CommUtils;
-import net.frontlinesms.payment.safaricom.RealCService;
 import net.frontlinesms.payment.safaricom.SafaricomPaymentService;
 
 import org.mockito.Mockito;
@@ -29,7 +28,11 @@ public class CreditSimulationLauncher {
 		setupMockModem();
 		
 		SafaricomPaymentService safaricom = new SafaricomPaymentService();
-		safaricom.setCService(new RealCService());
+		CService cService = new CService("COM1", 9600, "Wavecom", "Stk", null);
+		if(!(cService.getAtHandlerName().equals("CATHandler_Wavecom_Stk"))) {
+			throw new RuntimeException("Failed to initiialise AT Handler as expected.");
+		}
+		safaricom.setCService(cService);
 		
 		// Launch FrontlineSMS
 		startFrontlineSms(args);
